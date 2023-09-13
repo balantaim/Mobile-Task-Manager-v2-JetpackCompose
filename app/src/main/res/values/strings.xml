@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BauBuddy</string>
+    <string name="splash">Splash screen icon</string>
+    <string name="details">Details</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="return_screen">Return to previous screen</string>
+</resources>
