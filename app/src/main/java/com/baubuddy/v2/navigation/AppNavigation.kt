@@ -2,9 +2,11 @@ package com.baubuddy.v2.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.baubuddy.v2.view.details.DetailsScreen
 import com.baubuddy.v2.view.home.HomeScreen
 import com.baubuddy.v2.view.search.SearchScreen
@@ -26,9 +28,11 @@ fun AppNavigation (){
             val mainViewModel = hiltViewModel<MainViewModel>()
             HomeScreen(navController = navController)
         }
-        composable(AppScreens.DetailsScreen.name){
+        composable(route = AppScreens.DetailsScreen.name +"/{id}", arguments = listOf(
+            navArgument("id"){ type = NavType.StringType; defaultValue = "" }
+        )){backStackEntry ->
             val detailsViewModel = hiltViewModel<DetailsViewModel>()
-            DetailsScreen(navController = navController)
+            DetailsScreen(navController = navController, detailsViewModel, backStackEntry.arguments?.getString("id"))
         }
         composable(AppScreens.SearchScreen.name){
             val searchViewModel = hiltViewModel<SearchViewModel>()

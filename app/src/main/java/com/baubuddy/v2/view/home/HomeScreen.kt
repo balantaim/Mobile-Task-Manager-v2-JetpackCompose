@@ -3,6 +3,7 @@ package com.baubuddy.v2.view.home
 import android.annotation.SuppressLint
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,10 +29,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.baubuddy.v2.R
@@ -81,8 +87,11 @@ fun MessageList(messages: List<Task>, windowsInfo: WindowInfo, navController: Na
                     .fillMaxHeight(0.7f),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(text = "Title: ${index.title}")
-                    Text(text = "Id: ${index.id}")
+                    Text(text = "Title: ${index.title}",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 10.dp))
+                    //Text(text = "Id: ${index.id}")
                     Text(text = "Task: ${index.description}")
                 }
                 if (windowsInfo.screenWidthInfo is WindowInfo.WindowType.Compact){
@@ -93,7 +102,7 @@ fun MessageList(messages: List<Task>, windowsInfo: WindowInfo, navController: Na
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.Bottom) {
                         Button(onClick = {
-                                         getDetails(index, navController)
+                                         getDetails(index.id, navController)
                                          },
                             modifier = Modifier
                                 .padding(4.dp)
@@ -109,7 +118,7 @@ fun MessageList(messages: List<Task>, windowsInfo: WindowInfo, navController: Na
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Bottom) {
                         Button(onClick = {
-                            getDetails(index, navController)
+                            getDetails(index.id, navController)
                         },
                             modifier = Modifier
                                 .padding(4.dp)
@@ -137,27 +146,28 @@ private fun MainScaffold(taskList: List<Task>, windowsInfo: WindowInfo, navContr
             },
             onButtonClicked = {})
     })
-    {paddingValues ->
+    {innerPadding ->
         Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding())
-            .verticalScroll(rememberScrollState())){
+            .padding(innerPadding)){
+            MessageList(taskList, windowsInfo, navController)
         }
-        MessageList(taskList, windowsInfo, navController)
     }
-
-
-}
-private fun getDetails(task: Task, navController: NavController){
-    navController.navigate(AppScreens.DetailsScreen.name)
 }
 
+private fun getDetails(taskID: String, navController: NavController){
+    navController.navigate(AppScreens.DetailsScreen.name + "/$taskID")
+}
+
+@Composable
 private fun colorValidator(index: Task): Color{
     if(index.colorCode.isBlank() || index.colorCode.equals("")) {
-        //return "#FFFFFFFF"
+        if(isSystemInDarkTheme()){
+        return Color.Black
+        }
         return Color.White
     }
-    return Color.Gray
+    val color = Color(index.colorCode.toColorInt())
+    return color
 }
 
 @Preview(showBackground = true)

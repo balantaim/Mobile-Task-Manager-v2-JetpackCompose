@@ -5,4 +5,5 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="return_screen">Return to previous screen</string>
+    <string name="scan_barcode">Scan barcode or QR</string>
 </resources>

@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.baubuddy.v2.model.Task
 import com.baubuddy.v2.network.GetDataFromTheServer
 import com.baubuddy.v2.repository.TaskRepository
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +36,7 @@ class MainViewModel @Inject constructor(private val repository: TaskRepository) 
                         _taskList.value = myTasks
                     }
                 }
+
         }
     }
 
